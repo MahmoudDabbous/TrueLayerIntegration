@@ -60,7 +60,7 @@ firebase use <your-project-id>
 
 In the `functions` directory
 - Copy `.env.example` to `.env.local` for your normal environment variable
-- and to `.secrets.local` file for your secrets 
+- and to `.secret.local` file for your secrets 
 
 #### 2. for Production
 
