@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Result - TrueLayer Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<body class="bg-gray-50 min-h-screen text-gray-800">
+    <!-- Result Container -->
+    <div>
+        <div class="max-w-2xl mx-auto px-4 py-12">
+            <!-- Success State -->
+            <div id="success-state" class="hidden">
+                <div class="bg-white rounded-xl shadow-lg p-8 text-center">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                    </div>
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">Payment Successful!</h1>
+
+                    <div class="bg-gray-50 rounded-lg p-6 mb-6 text-left">
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Payment ID:</span>
+                                <span class="font-mono text-sm" id="success-payment-id">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Amount:</span>
+                                <span class="font-semibold" id="success-amount">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Status:</span>
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800"
+                                    id="success-status">
+                                    Authorized
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="makeAnotherPayment()"
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200">
+                        Make Another Payment
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pending State -->
+            <div id="pending-state" class="hidden">
+                <div class="bg-white rounded-xl shadow-lg p-8 text-center">
+                    <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">Payment Pending</h1>
+
+                    <div class="bg-gray-50 rounded-lg p-6 mb-6 text-left">
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Payment ID:</span>
+                                <span class="font-mono text-sm" id="pending-payment-id">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Amount:</span>
+                                <span class="font-semibold" id="pending-amount">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Status:</span>
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800"
+                                    id="pending-status">
+                                    Processing
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="makeAnotherPayment()"
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200">
+                        Back to Home
+                    </button>
+                </div>
+            </div>
+
+            <!-- Failed State -->
+            <div id="failed-state" class="hidden">
+                <div class="bg-white rounded-xl shadow-lg p-8 text-center">
+                    <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">Payment Failed</h1>
+                    <p class="text-gray-600 mb-6" id="error-message">Your payment could not be processed.</p>
+
+                    <div class="bg-gray-50 rounded-lg p-6 mb-6 text-left">
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Payment ID:</span>
+                                <span class="font-mono text-sm" id="failed-payment-id">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Amount:</span>
+                                <span class="font-semibold" id="failed-amount">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Status:</span>
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                                    Failed
+                                </span>
+                            </div>
+                            <div class="flex justify-between" id="error-code-row" style="display: none;">
+                                <span class="text-gray-600">Error Code:</span>
+                                <span class="font-mono text-xs text-gray-700" id="error-code">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="makeAnotherPayment()"
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200">
+                        Try Again
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function makeAnotherPayment() {
+            window.location.href = '/';
+        }
+
+        function formatAmount(amountInMinor, currency) {
+            const amount = amountInMinor / 100;
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: currency || 'EUR'
+            }).format(amount);
+        }
+
+        function getStatusClass(status) {
+            const statusLower = status.toLowerCase();
+            if (statusLower === 'authorized' || statusLower === 'executed' || statusLower === 'settled') {
+                return 'success';
+            } else if (statusLower === 'failed') {
+                return 'failed';
+            } else {
+                return 'pending';
+            }
+        }
+
+        function displayResult() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentId = urlParams.get('payment_id');
+            const status = urlParams.get('status');
+            const amount = urlParams.get('amount');
+            const currency = urlParams.get('currency');
+            const error = urlParams.get('error');
+            const errorCode = urlParams.get('error_code');
+
+            // Handle error case
+            if (error) {
+                document.getElementById('error-message').textContent = error;
+                if (paymentId) {
+                    document.getElementById('failed-payment-id').textContent = paymentId;
+                }
+                if (amount && currency) {
+                    const formattedAmount = formatAmount(parseInt(amount), currency);
+                    document.getElementById('failed-amount').textContent = formattedAmount;
+                } else {
+                    document.getElementById('failed-amount').textContent = 'N/A';
+                }
+                if (errorCode) {
+                    document.getElementById('error-code').textContent = errorCode;
+                    document.getElementById('error-code-row').style.display = 'flex';
+                }
+                document.getElementById('failed-state').classList.remove('hidden');
+                return;
+            }
+
+            const stateClass = getStatusClass(status || '');
+            const formattedAmount = formatAmount(parseInt(amount || '0'), currency);
+
+            if (stateClass === 'success') {
+                document.getElementById('success-payment-id').textContent = paymentId || 'N/A';
+                document.getElementById('success-amount').textContent = formattedAmount;
+                document.getElementById('success-status').textContent = status || 'Unknown';
+                document.getElementById('success-state').classList.remove('hidden');
+            } else if (stateClass === 'failed') {
+                document.getElementById('failed-payment-id').textContent = paymentId || 'N/A';
+                document.getElementById('failed-amount').textContent = formattedAmount;
+                document.getElementById('error-message').textContent = 'Your payment was declined. Please try a different payment method.';
+                document.getElementById('failed-state').classList.remove('hidden');
+            } else {
+                document.getElementById('pending-payment-id').textContent = paymentId || 'N/A';
+                document.getElementById('pending-amount').textContent = formattedAmount;
+                document.getElementById('pending-status').textContent = status || 'Processing';
+                document.getElementById('pending-state').classList.remove('hidden');
+            }
+        }
+        window.addEventListener('DOMContentLoaded', displayResult);
+    </script>
+</body>
+
+</html>

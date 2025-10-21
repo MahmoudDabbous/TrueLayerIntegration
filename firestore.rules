@@ -1,0 +1,15 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    match /payments/{paymentId} {
+      allow read, write : if request.url == "/webhook" || request.url == "/paymentCallback";
+    }
+    
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
